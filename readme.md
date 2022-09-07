@@ -1,5 +1,5 @@
-# Three.js Starter
-Courtesy of Bruno Simon of https://threejs-journey.xyz/
+# Three.js Sandbox
+A sandbox environment for learning and experimenting with Three.JS
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
@@ -15,3 +15,5 @@ npm run dev
 # Build for production in the dist/ directory
 npm run build
 ```
+
+Courtesy of Bruno Simon of https://threejs-journey.xyz/
