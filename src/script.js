@@ -18,7 +18,7 @@ const scene = new THREE.Scene();
 
 // Objects
 // const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
-const geometry = new THREE.SphereGeometry(.5, 64, 64);
+const geometry = new THREE.SphereGeometry(0.5, 64, 64);
 
 // Materials
 
@@ -43,65 +43,65 @@ scene.add(pointLight);
 
 // Light 2
 const pointLight2 = new THREE.PointLight(0x8e4126, 0.1);
-pointLight2.position.set(2.1, 6, 2.9);
-pointLight2.intensity = 6.22;
+pointLight2.position.set(2.1, 6, -1.52);
+pointLight2.intensity = 6.2;
 scene.add(pointLight2);
 
 //// *** GUI TESTING *** ////
 
 // Note: the slider will appear when you set both a minimum and a maximum
-const light2Gui = gui.addFolder('Light 2');
-light2Gui.add(pointLight2.position, 'x').min(-5).max(5).step(0.01);
-light2Gui.add(pointLight2.position, 'y').min(-6).max(6).step(0.01);
-light2Gui.add(pointLight2.position, 'z').min(-3).max(3).step(0.01);
-light2Gui.add(pointLight2, 'intensity').min(0).max(10).step(0.01);
+// const light2Gui = gui.addFolder('Light 2');
+// light2Gui.add(pointLight2.position, 'x').min(-5).max(5).step(0.01);
+// light2Gui.add(pointLight2.position, 'y').min(-6).max(6).step(0.01);
+// light2Gui.add(pointLight2.position, 'z').min(-3).max(3).step(0.01);
+// light2Gui.add(pointLight2, 'intensity').min(0).max(10).step(0.01);
 
-// Colour slider GUI
-const light2Color = {
-    color: 0x8e4126
-}
+// // Colour slider GUI
+// const light2Color = {
+//     color: 0x8e4126
+// }
 
-// When the colour is changed in GUI, trigger onChange() function to do that colour change.
-light2Gui.addColor(light2Color, 'color')
-    .onChange(() => {
-        pointLight2.color.set(light2Color.color)
-    });
+// // When the colour is changed in GUI, trigger onChange() function to do that colour change.
+// light2Gui.addColor(light2Color, 'color')
+//     .onChange(() => {
+//         pointLight2.color.set(light2Color.color)
+//     });
 
 // Visual representation of the light source's position in the environment
-const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, 1);
-scene.add(pointLightHelper2);
+// const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, 1);
+// scene.add(pointLightHelper2);
 
 //// *** GUI TESTING END*** ////
 
 // Light 3
 const pointLight3 = new THREE.PointLight(0x460b04, 0.1);
-pointLight3.position.set(-1.2, -1.05, 0.6);
-pointLight3.intensity = 1.48;
+pointLight3.position.set(-1.43, -1, -2.25);
+pointLight3.intensity = 1.5;
 scene.add(pointLight3);
 
 //// *** GUI TESTING *** ////
 
 // Note: the slider will appear when you set both a minimum and a maximum
-const light3Gui = gui.addFolder('Light 3');
-light3Gui.add(pointLight3.position, 'x').min(-5).max(5).step(0.01);
-light3Gui.add(pointLight3.position, 'y').min(-6).max(6).step(0.01);
-light3Gui.add(pointLight3.position, 'z').min(-3).max(3).step(0.01);
-light3Gui.add(pointLight3, 'intensity').min(0).max(10).step(0.01);
+// const light3Gui = gui.addFolder('Light 3');
+// light3Gui.add(pointLight3.position, 'x').min(-5).max(5).step(0.01);
+// light3Gui.add(pointLight3.position, 'y').min(-6).max(6).step(0.01);
+// light3Gui.add(pointLight3.position, 'z').min(-3).max(3).step(0.01);
+// light3Gui.add(pointLight3, 'intensity').min(0).max(10).step(0.01);
 
-// Colour slider GUI
-const light3Color = {
-    color: 0x460b04
-}
+// // Colour slider GUI
+// const light3Color = {
+//     color: 0x460b04
+// }
 
-// When the colour is changed in GUI, trigger onChange() function to do that colour change.
-light3Gui.addColor(light3Color, 'color')
-    .onChange(() => {
-        pointLight3.color.set(light3Color.color)
-    });
+// // When the colour is changed in GUI, trigger onChange() function to do that colour change.
+// light3Gui.addColor(light3Color, 'color')
+//     .onChange(() => {
+//         pointLight3.color.set(light3Color.color)
+//     });
 
 // Visual representation of the light source's position in the environment
-const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 1);
-scene.add(pointLightHelper3);
+// const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 1);
+// scene.add(pointLightHelper3);
 
 //// *** GUI TESTING END*** ////
 
@@ -156,15 +156,44 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 
+document.addEventListener('mousemove', onDocumentMouseMove);
+
+let mouseX = 0;
+let mouseY = 0;
+
+let targetX = 0;
+let targetY = 0;
+
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
+
+function onDocumentMouseMove(event) {
+    mouseX = (event.clientX - windowHalfX);
+    mouseY = (event.clientY - windowHalfY);
+}
+
+const updateSphere = (event) => {
+    sphere.position.y = window.scrollY * .001;
+}
+
+window.addEventListener('scroll', updateSphere);
+
 const clock = new THREE.Clock();
 
 const tick = () =>
 {
 
+    targetX = mouseX * .001;
+    targetY = mouseY * .001;
+
     const elapsedTime = clock.getElapsedTime();
 
     // Update objects
     sphere.rotation.y = .5 * elapsedTime;
+
+    sphere.rotation.y += .5 * (targetX - sphere.rotation.y);
+    sphere.rotation.x += .05 * (targetY - sphere.rotation.x);
+    sphere.position.z += -.05 * (targetY - sphere.rotation.x);
 
     // Update Orbital Controls
     // controls.update()
